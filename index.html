@@ -5,17 +5,121 @@
   <title>Code Automation</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <meta name="description" content="" />
+  <link href="css/normalize.css" rel="stylesheet">
   <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/engine_flowy.css">
+  <link rel="stylesheet" type="text/css" href="css/demo-styles.css" />
   <link rel="stylesheet" type="text/css" href="css/style.css" />
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-  <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="apple-touch-icon.png">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <meta name="theme-color" content="">
 </head>
 <body>
-  <h1>Hello, world!</h1>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12">
+        
+        <div class="codeautomation_wrapper">
+          <div class="codeautomation">
+            <div class="codeautomation_header">
+                <div class="codeautomation_header_nav">
+                    <h3>Code Automation</h3>
+                </div>
+                <div class="codeautomation_header_buildswitch">
+                    <ul class="cda_tab cda_tab--switch">
+                        <li class="cda_tab_item active">
+                            <button class="cda_btn cda_btn--transparent cda_btn--lg" type="button"><span>Build</span></button>
+                        </li>
+                        <li class="cda_tab_item">
+                            <button class="cda_btn cda_btn--transparent cda_btn--lg" type="button"><span>Debug</span></button>
+                        </li>
+                    </ul>
+                </div>
+                <ul class="codeautomation_header_action">
+                    <li class="codeautomation_header_action_item">
+                        <button class="cda_btn cda_btn--icon" type="button"><i class="icon-history"></i><span>History</span></button>
+                    </li>
+                    <li class="codeautomation_header_action_item">
+                        <button class="cda_btn cda_btn--icon" type="button"><i class="icon-save"></i><span>Draft</span></button>
+                    </li>
+                    <li class="codeautomation_header_action_item">
+                        <button class="cda_btn cda_btn--icon" type="button"><i class="icon-publish"></i><span>Publish</span></button>
+                    </li>
+                </ul>
+            </div>
+            <div class="codeautomation_body">
+              <div class="codeautomation_left">
+                <div class="codeautomation_left_header">
+                    <div class="codeautomation_left_search">
+                        <i class="icon-search"></i>
+                        <input type="text" placeholder="Search connectors">
+                    </div>
+                </div>
+                <div class="codeautomation_left_body">
+                    <div class="codeautomation_left_widget">
+                        <div class="codeautomation_left_widget_nav">
+                            <div id="cores" class="codeautomation_left_widget_nav_item navactive side">CORE</div>
+                            <div id="actions" class="codeautomation_left_widget_nav_item side">Actions</div>
+                            <div id="loggers" class="codeautomation_left_widget_nav_item side">Loggers</div>
+                        </div>
+                        <div id="blocklist" class="codeautomation_left_widget_blocklist">
+                            <div class="blockelem create-flowy noselect">
+                                <input type="hidden" name='blockelemtype' class="blockelemtype" value="1">
+                                <div class="grabme">
+                                    <img src="assets/grabme.svg">
+                                </div>
+                                <div class="blockin">
+                                    <div class="blockico">
+                                        <span></span>
+                                        <img src="assets/eye.svg">
+                                    </div>
+                                    <div class="blocktext">
+                                        <p class="blocktitle">New visitor</p>
+                                        <p class="blockdesc">Triggers when somebody visits a specified page</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+              </div>
+              <div class="codeautomation_main">
+                <div id="canvas"></div>
+              </div>
+              <div class="codeautomation_right">
+                <div id="propwrap">
+                    <div id="properties">
+                        <div id="close">
+                            <img src="assets/close.svg">
+                        </div>
+                        <p id="header2">Properties</p>
+                        <div id="propswitch">
+                            <div id="dataprop">Data</div>
+                            <div id="alertprop">Alerts</div>
+                            <div id="logsprop">Logs</div>
+                        </div>
+                        <div id="proplist">
+                            <p class="inputlabel">Select database</p>
+                            <div class="dropme">Database 1 <img src="assets/dropdown.svg"></div>
+                            <p class="inputlabel">Check properties</p>
+                            <div class="dropme">All<img src="assets/dropdown.svg"></div>
+                            <div class="checkus"><img src="assets/checkon.svg"><p>Log on successful performance</p></div>
+                            <div class="checkus"><img src="assets/checkoff.svg"><p>Give priority to this block</p></div>
+                        </div>
+                        <div id="divisionthing"></div>
+                        <div id="removeblock">Delete blocks</div>
+                    </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
   <script src="js/jquery-3.7.0.min.js"></script>
+  <script src="js/engine_flowy.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>
