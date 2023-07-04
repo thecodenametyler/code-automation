@@ -5760,6 +5760,10 @@ strong, b,
     background-color: #103838;
     border-color: #103838;
     color: #FFF; }
+  .cda_btn--sm {
+    font-size: 0.875rem;
+    line-height: 1.125rem;
+    padding: 0.375rem 0.5rem; }
   .cda_btn--lg {
     font-size: 1.125rem;
     line-height: 1.375rem;
@@ -5837,8 +5841,55 @@ strong, b,
   min-height: calc(100vh - 84px);
   top: 0;
   left: 363px; }
+  .codeautomation_main_bottom {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    z-index: 1;
+    padding: 0.375rem;
+    background: #f8f5fd; }
   .codeautomation_main #canvas {
-    width: calc(100%); }
+    width: calc(100%);
+    background-image: url(../assets/tile.png);
+    background-repeat: repeat;
+    background-size: 30px 30px;
+    background-color: #FBFBFB; }
+    .codeautomation_main #canvas .indicator {
+      background-color: #103838; }
+      .codeautomation_main #canvas .indicator::after {
+        background-color: #103838; }
+    .codeautomation_main #canvas .blockelem {
+      width: auto;
+      padding: 1rem;
+      border: 2px solid #c4c4c6;
+      transition: border-color ease 0.3s; }
+      .codeautomation_main #canvas .blockelem.selectedblock {
+        border-color: #103838; }
+    .codeautomation_main #canvas .codeautomation_block {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column; }
+      .codeautomation_main #canvas .codeautomation_block p {
+        margin: 0; }
+      .codeautomation_main #canvas .codeautomation_block_icon i {
+        display: block;
+        font-size: 1.5rem;
+        line-height: 1;
+        color: #103838; }
+      .codeautomation_main #canvas .codeautomation_block_core, .codeautomation_main #canvas .codeautomation_block_end {
+        position: absolute;
+        bottom: 110%;
+        left: 50%;
+        transform: translateX(-50%); }
+        .codeautomation_main #canvas .codeautomation_block_core i, .codeautomation_main #canvas .codeautomation_block_end i {
+          color: #daa520;
+          font-size: 1.125rem;
+          line-height: 1;
+          display: block; }
+      .codeautomation_main #canvas .codeautomation_block_end {
+        bottom: auto;
+        top: 110%; }
 .codeautomation_left {
   box-sizing: border-box;
   position: absolute;
@@ -5905,5 +5956,134 @@ strong, b,
           opacity: 1; }
   .codeautomation_left_widget_blocklist {
     padding: 1.25rem 0.625rem; }
+    .codeautomation_left_widget_blocklist .blockelem {
+      padding: 0.625rem;
+      width: 100%;
+      padding-left: 2.25rem;
+      position: relative;
+      border-color: #f8f5fd; }
+      .codeautomation_left_widget_blocklist .blockelem:not(:last-child) {
+        margin-bottom: 0.5rem; }
+      .codeautomation_left_widget_blocklist .blockelem .grabme {
+        position: absolute;
+        margin: 0;
+        width: auto;
+        top: 50%;
+        left: 14px;
+        transform: translateY(-50%); }
+      .codeautomation_left_widget_blocklist .blockelem .blockin {
+        margin: 0; }
+      .codeautomation_left_widget_blocklist .blockelem_body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-left: 0; }
+      .codeautomation_left_widget_blocklist .blockelem_icon {
+        width: 2rem;
+        height: 2rem;
+        background-color: #f8f5fd;
+        border-radius: 0.375rem;
+        text-align: center;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center; }
+        .codeautomation_left_widget_blocklist .blockelem_icon i {
+          color: #103838;
+          display: block;
+          font-size: 1.375rem;
+          line-height: 1; }
+      .codeautomation_left_widget_blocklist .blockelem_titledesc {
+        display: inline-block;
+        width: 220px;
+        vertical-align: top;
+        margin-left: 0.875rem;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        flex-direction: column; }
+        .codeautomation_left_widget_blocklist .blockelem_titledesc p {
+          color: #103838;
+          margin: 0; }
+          .codeautomation_left_widget_blocklist .blockelem_titledesc p:not(:last-child) {
+            margin-bottom: 0.375rem; }
+      .codeautomation_left_widget_blocklist .blockelem_title {
+        font-weight: 700;
+        font-size: 0.875rem; }
+      .codeautomation_left_widget_blocklist .blockelem_desc {
+        font-size: 0.75rem; }
+.codeautomation_right #properties {
+  border-left: 2px solid #f8f5fd; }
+.codeautomation_right_header {
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center; }
+  .codeautomation_right_header h4, .codeautomation_right_header h5, .codeautomation_right_header h6 {
+    font-size: 0.875rem;
+    margin-bottom: 0.375rem; }
+  .codeautomation_right_header p {
+    font-size: 0.75rem;
+    margin: 0; }
+    .codeautomation_right_header p:not(:last-child) {
+      margin-bottom: 0.375rem; }
+.codeautomation_right_form {
+  margin-bottom: 1.25rem; }
+  .codeautomation_right_form label {
+    margin-bottom: 0.375rem;
+    font-size: 0.875rem; }
+  .codeautomation_right_form select,
+  .codeautomation_right_form input {
+    background-color: #FFF;
+    border-radius: 5px;
+    border: 1px solid #E8E8EF;
+    box-shadow: 0px 2px 8px rgba(34, 34, 87, 0.05);
+    font-family: Roboto;
+    font-size: 0.875rem;
+    color: #253134;
+    padding: 0.5rem;
+    line-height: 1.25rem;
+    width: 100%; }
+  .codeautomation_right_form .cda_btn {
+    width: 100%; }
+  .codeautomation_right_form_row:not(:last-child) {
+    margin-bottom: 0.625rem; }
+.codeautomation_zoom {
+  margin: 0;
+  padding: 0;
+  list-style: none; }
+  .codeautomation_zoom_item:not(:last-child) {
+    margin-bottom: 0.375rem; }
+  .codeautomation_zoom_item .cda_btn {
+    font-size: 1.5rem;
+    padding: 0.375rem 0.5rem; }
+
+.blockelem.dragging {
+  padding: 0.625rem; }
+  .blockelem.dragging .blockelem_icon {
+    width: 2rem;
+    height: 2rem;
+    background-color: #f8f5fd;
+    border-radius: 0.375rem;
+    text-align: center;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center; }
+    .blockelem.dragging .blockelem_icon i {
+      color: #103838;
+      display: block;
+      font-size: 1.375rem;
+      line-height: 1; }
+  .blockelem.dragging .blockelem_titledesc {
+    display: none; }
+  .blockelem.dragging .blockin {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center; }
+  .blockelem.dragging .grabme {
+    display: none; }
 
 /*# sourceMappingURL=style.css.map */

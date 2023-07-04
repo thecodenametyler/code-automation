@@ -18,6 +18,11 @@
         color: $white;
     }
 
+    &--sm {
+        font-size: calculateRem(14px);
+        line-height: calculateRem(18px);
+        padding: calculateRem(6px) calculateRem(8px);
+    }
     &--lg {
         font-size: calculateRem(18px);
         line-height: calculateRem(22px);
@@ -143,8 +148,73 @@
         min-height: calc(100vh - 84px);
         top: 0;
         left: 363px;
+        &_bottom {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            z-index: 1;
+            padding: calculateRem(6px);
+            background: $grey;
+        }
         #canvas {
             width: calc(100%);
+            background-image: url(../assets/tile.png);
+            background-repeat: repeat;
+            background-size: 30px 30px;
+            background-color: #FBFBFB;
+
+            .indicator {
+                background-color: $accent-1;
+                &::after {
+                    background-color: $accent-1;
+                }
+            }
+            .blockelem {
+                width: auto;
+                padding: calculateRem(16px);
+                border: 2px solid $text-inactive;
+                transition: border-color ease 0.3s;
+                &.selectedblock {
+                    border-color: $accent-1;
+                }
+            }
+
+            .codeautomation {
+                &_block {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    flex-direction: column;
+                    p {
+                        margin: 0;
+                    }
+                    &_icon {
+                        i {
+                            display: block;
+                            font-size: calculateRem(24px);
+                            line-height: 1;
+                            color: $accent-1;
+                        }
+                    }
+                    &_core,
+                    &_end {
+                        position: absolute;
+                        bottom: 110%;
+                        left: 50%;
+                        transform: translateX(-50%);
+                        i {
+                            color: #daa520;
+                            font-size: calculateRem(18px);
+                            line-height: 1;
+                            display: block;
+                        }
+                    }
+                    &_end {
+                        bottom: auto;
+                        top: 110%;
+                    }
+                }
+            }
         }
     }
     &_left {
@@ -225,8 +295,180 @@
             }
             &_blocklist {
                 padding: calculateRem(20px) calculateRem(10px);
+                .blockelem {
+                    padding: calculateRem(10px);
+                    width: 100%;
+                    padding-left: calculateRem(36px);
+                    position: relative;
+                    border-color: $grey;
+                    &:not(:last-child) {
+                        margin-bottom: calculateRem(8px);
+                    }
+                    .grabme {
+                        position: absolute;
+                        margin: 0;
+                        width: auto;
+                        top: 50%;
+                        left: 14px;
+                        transform: translateY(-50%);
+                    }
+                    .blockin {
+                        margin: 0;
+                    } 
+                    &_body {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        margin-left: 0;
+                    }
+                    &_icon {
+                        width: calculateRem(32px);
+                        height: calculateRem(32px);
+                        background-color: $grey;
+                        border-radius: calculateRem(6px);
+                        text-align: center;
+                        margin: 0;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        i {
+                            color: $accent-1;
+                            display: block;
+                            font-size: calculateRem(22px);
+                            line-height: 1;
+                        }
+                    }
+                    &_titledesc {
+                        display: inline-block;
+                        width: 220px;
+                        vertical-align: top;
+                        margin-left: calculateRem(14px);
+                        display: flex;
+                        justify-content: center;
+                        align-items: flex-start;
+                        flex-direction: column;
+                        p {
+                            color: $accent-1;
+                            margin: 0;
+                            &:not(:last-child) {
+                                margin-bottom: calculateRem(6px);
+                            }
+                        }
+                    }
+                    &_title {
+                        font-weight: 700;
+                        font-size: calculateRem(14px);
+                    }
+                    &_desc {
+                        font-size: calculateRem(12px);
+                    }
+                }
             }
         }
     }
+    &_right {
+        #properties {
+            border-left: 2px solid $grey;
+        }
+        &_header {
+            padding: calculateRem(16px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            h4, h5, h6 {
+                font-size: calculateRem(14px);
+                margin-bottom: calculateRem(6px);
+            }
+            p {
+                font-size: calculateRem(12px);
+                margin: 0;
+                &:not(:last-child) {
+                    margin-bottom: calculateRem(6px);
+                }
+            }
+        }
+        &_body {
+        }
+        &_form {
+            margin-bottom:  calculateRem(20px);
+            label {
+                margin-bottom:  calculateRem(6px);
+                font-size: calculateRem(14px);
+            }
+            select,
+            input {
+                background-color: #FFF;
+                border-radius: 5px;
+                border: 1px solid #E8E8EF;
+                box-shadow: 0px 2px 8px rgba(34, 34, 87, 0.05);
+                font-family: Roboto;
+                font-size: calculateRem(14px);
+                color: #253134;
+                padding:  calculateRem(8px);
+                line-height:  calculateRem(20px);
+                width: 100%;
+            }
+            .cda_btn {
+                width: 100%;
+            }
+            &_row {
+                &:not(:last-child) {
+                    margin-bottom:  calculateRem(10px);
+                }
+            }
+        }
+    }
+    &_zoom {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        &_item {
+            &:not(:last-child) {
+                margin-bottom: calculateRem(6px);
+            }
+            .cda_btn {
+                font-size: calculateRem(24px);
+                padding: calculateRem(6px) calculateRem(8px);
+            }
+        }
+    }
+}
 
+.blockelem.dragging {
+    // .global {
+        // width: 120px;
+        padding: calculateRem(10px);
+        .blockelem_icon {
+            width: calculateRem(32px);
+            height: calculateRem(32px);
+            background-color: $grey;
+            border-radius: calculateRem(6px);
+            text-align: center;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            i {
+                color: $accent-1;
+                display: block;
+                font-size: calculateRem(22px);
+                line-height: 1;
+            }
+        }
+        .blockelem_titledesc {
+            display: none;
+        }
+
+        .blockin {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        } 
+
+        .grabme {
+            display: none;
+        }
+    // }
 }
