@@ -31,7 +31,7 @@ var codeautomation = {
                 {
                     label: 'Receiver number',
                     name: 'receiver_number',
-                    id: 'sms_receiver',
+                    id: 'receiver_number',
                     type: 'text'
                 },
                 {
@@ -54,7 +54,51 @@ var codeautomation = {
                     label: 'Time passed',
                     name: 'time_passed',
                     id: 'time_passed',
-                    type: 'text'
+                    type: 'select',
+                    options: [
+                        {
+                            name: '1 min',
+                            value: '1min'
+                        },
+                        {
+                            name: '5 min',
+                            value: '5min'
+                        },
+                        {
+                            name: '15 min',
+                            value: '15min'
+                        },
+                        {
+                            name: '30 min',
+                            value: '30min'
+                        },
+                        {
+                            name: '45 min',
+                            value: '45min'
+                        },
+                        {
+                            name: '60 min',
+                            value: '60min'
+                        }
+                    ]
+                },
+                {
+                    label: 'Do',
+                    name: 'do_event',
+                    id: 'do_event',
+                    type: 'select',
+                    options: [
+                        {
+                            name: 'Forward to email',
+                            value: 'forwardtoemail'
+                        }
+                    ]
+                },
+                {
+                    label: 'email',
+                    name: 'email',
+                    id: 'email',
+                    type: 'email'
                 }
             ]
         }
@@ -67,8 +111,7 @@ var codeautomation = {
                     label: 'Action performed',
                     name: 'action_performed',
                     id: 'action_performed',
-                    type: 'select',
-                    options: []
+                    type: 'text'
                 }
             ]
         }
@@ -101,12 +144,26 @@ var codeautomation = {
     },
     utils: {
         form: {
+            submit: (evt,currentElem)=> {
+                let formWrapper = evt.target.closest(".codeautomation_right_form_wrapper");
+                let form = formWrapper.querySelector("form");
+                let uuid = formWrapper.getAttribute('data-cda-blk-uuid');
+                let formElem = form.elements;
+                
+                Array.from(formElem).forEach(function (curField) {
+                    let fname = curField.getAttribute('name');
+                    fname = fname.split('__')[1];
+                    let fval = curField.value;
+                    codeautomation.el.blocks.alive[uuid].data[fname] = fval;
+                });
+
+            },
             create: (data = null, uuid = null)=>{
                 uuid = !!uuid ? uuid : codeautomation.utils.generateUUID();
                 let tpl = ``;
                 if(!!data) {
                     tpl = `
-                    <div class="codeautomation_right_form_wrapper">
+                    <div class="codeautomation_right_form_wrapper" data-cda-blk-uuid="${uuid}">
                         <div class="codeautomation_right_header">
                             <div>
                                 <h5>${data.name} Properties</h5>
@@ -121,6 +178,7 @@ var codeautomation = {
                         if(data?.fields) {
                             tpl += `
                             <div class="codeautomation_right_body">
+                                <form name="codeautomation_block_form">
                                 <div class="codeautomation_right_form">
                                     `;
                                     
@@ -129,40 +187,51 @@ var codeautomation = {
                                         <div class="codeautomation_right_form_row">
                                             <label for="${uuid}__${curField?.id}">${curField?.label}</label>
                                             `;
-                                            switch (curField?.type) {
-                                                case 'select':
-                                                    tpl += `
-                                                    <select name="${uuid}__${curField?.name}" id="${uuid}__${curField?.id}">
-                                                        <option>Select a channel</option>
-                                                    </select>
-                                                    `;
-                                                    break;
-                                                case 'text':
-                                                    tpl += `
-                                                    <input name="${uuid}__${curField?.name}" id="${uuid}__${curField?.id}" placeholder="type..." type="text">
-                                                    `;
-                                                    break;
-                                                case 'textarea':
-                                                    tpl += `
-                                                    <textarea name="${uuid}__${curField?.name}" id="${uuid}__${curField?.id}" placeholder="type..."></textarea>
-                                                    `;
-                                                    break;
-                                            
-                                                default:
-                                                    break;
+
+                                            if(!!curField?.type) {
+                                                switch (curField.type) {
+                                                    case 'select':
+                                                        var fieldOpt = `<option>Select...</option>`;
+                                                        if(!!curField?.options) {
+                                                            curField.options.forEach(function (curOption) {
+                                                                fieldOpt += `<option value="${curOption.value}">${curOption.name}</option>`;
+                                                            });
+                                                        }
+                                                        tpl += `
+                                                        <select name="${uuid}__${curField?.name}" id="${uuid}__${curField?.id}">
+                                                            ${fieldOpt}
+                                                        </select>
+                                                        `;
+                                                        break;
+                                                    case 'email':
+                                                    case 'text':
+                                                        tpl += `
+                                                        <input name="${uuid}__${curField?.name}" id="${uuid}__${curField?.id}" placeholder="type..." type="text">
+                                                        `;
+                                                        break;
+                                                    case 'textarea':
+                                                        tpl += `
+                                                        <textarea name="${uuid}__${curField?.name}" id="${uuid}__${curField?.id}" placeholder="type..."></textarea>
+                                                        `;
+                                                        break;
+                                                
+                                                    default:
+                                                        break;
+                                                }
                                             }
-                                            
+
                                         tpl += `
                                         </div>
                                         `;
                                     });
     
                                     tpl += `
-                                    <div class="codeautomation_right_form_row">
-                                        <button class="cda_btn cda_btn--icon" type="button">
-                                            <i class="icon-save"></i><span>Save</span>
-                                        </button>
-                                    </div>
+                                </div>
+                                </form>
+                                <div class="codeautomation_right_form_row">
+                                    <button onclick="codeautomation.utils.form.submit(event, this);" class="cda_btn cda_btn--icon codeautomation_right_form_submit" type="button">
+                                        <i class="icon-save"></i><span>Save</span>
+                                    </button>
                                 </div>
                             </div>`;
                         }
@@ -246,8 +315,9 @@ codeautomation.init();
         drag.innerHTML += `<input type="hidden" name="blockuuid" class="blockuuid" value="${uuid}"></input>`;
 
         codeautomation.el.blocks.alive[uuid] = {
-            'id': uuid,
-            'blockID': drag.querySelector(".blockelemtype").value
+            id: uuid,
+            blockID: drag.querySelector(".blockelemtype").value,
+            data: {}
         }
         
         if (drag.querySelector(".blockelemtype").value == "core1") {
@@ -298,13 +368,29 @@ codeautomation.init();
         block.classList.add("blockdisabled");
         tempblock2 = block;
     }
-    function rearrange() {
-        console.log('rearrange');
+    function rearrange(block, parent) {
+        console.log('rearrange AKA delete', block);
+        let oldUUID = [];
+        let curUUID = [];
+        let flOut = flowy.output();
+        flOut.blocks.forEach((currentElem)=>{
+            curUUID.push(currentElem.uuid);
+        });
+        for (let currentElemIndex in codeautomation.el.blocks.alive) {
+            oldUUID.push(currentElemIndex);
+        }
+
+        let toberemoved = oldUUID.filter(x => curUUID.indexOf(x) === -1);
+        
+        toberemoved.forEach((currentElem)=>{
+            delete codeautomation.el.blocks.alive[currentElem];
+        });
+
     }
     function release() {
         console.log('release');
         if (tempblock2) {
-            console.log('fffff');
+            console.log('release inside', tempblock2, tempblock);
             tempblock2.classList.remove("blockdisabled");
         }
     }

@@ -93,11 +93,13 @@ var flowy = function(canvas, grab, release, snapping, rearrange, spacing_x, spac
             if (blocks.length > 0) {
                 for (var i = 0; i < blocks.length; i++) {
                     json_data.blocks.push({
+                        uuid: '',
                         id: blocks[i].id,
                         parent: blocks[i].parent,
                         data: [],
                         attr: []
                     });
+
                     var blockParent = document.querySelector(".blockid[value='" + blocks[i].id + "']").parentNode;
                     blockParent.querySelectorAll("input").forEach(function(block) {
                         var json_name = block.getAttribute("name");
@@ -107,6 +109,9 @@ var flowy = function(canvas, grab, release, snapping, rearrange, spacing_x, spac
                             value: json_value
                         });
                     });
+
+                    json_data.blocks[i].uuid = blockParent.querySelector('[name="blockuuid"]').value;
+
                     Array.prototype.slice.call(blockParent.attributes).forEach(function(attribute) {
                         var jsonobj = {};
                         jsonobj[attribute.name] = attribute.value;
@@ -646,6 +651,7 @@ var flowy = function(canvas, grab, release, snapping, rearrange, spacing_x, spac
 
     function beforeDelete(drag, parent) {
         console.log('beforeDelete');
+        // console.log(drag.querySelector('blockuuid').value);
         return rearrange(drag, parent);
     }
 

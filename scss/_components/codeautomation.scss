@@ -372,7 +372,7 @@
             border-left: 2px solid $grey;
         }
         &_header {
-            padding: calculateRem(16px);
+            padding: calculateRem(16px) 0;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -386,6 +386,9 @@
                 &:not(:last-child) {
                     margin-bottom: calculateRem(6px);
                 }
+            }
+            .cda_btn {
+                margin-left: calculateRem(10px);
             }
         }
         &_body {
@@ -417,6 +420,9 @@
                 &:not(:last-child) {
                     margin-bottom:  calculateRem(10px);
                 }
+            }
+            &_submit {
+                width: 100%;
             }
         }
     }
