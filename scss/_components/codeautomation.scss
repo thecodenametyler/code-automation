@@ -171,7 +171,7 @@
             }
             .blockelem {
                 width: auto;
-                padding: calculateRem(16px);
+                padding: 0;
                 border: 2px solid $text-inactive;
                 transition: border-color ease 0.3s;
                 &.selectedblock {
@@ -185,6 +185,7 @@
                     justify-content: center;
                     align-items: center;
                     flex-direction: column;
+                    padding: calculateRem(16px);
                     p {
                         margin: 0;
                     }
@@ -395,6 +396,7 @@
                 margin-bottom:  calculateRem(6px);
                 font-size: calculateRem(14px);
             }
+            textarea,
             select,
             input {
                 background-color: #FFF;

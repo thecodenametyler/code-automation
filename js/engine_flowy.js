@@ -65,6 +65,7 @@ var flowy = function(canvas, grab, release, snapping, rearrange, spacing_x, spac
         canvas_div.appendChild(el);
         flowy.import = function(output) {
             canvas_div.innerHTML = output.html;
+            console.log('import');
             for (var a = 0; a < output.blockarr.length; a++) {
                 blocks.push({
                     childwidth: parseFloat(output.blockarr[a].childwidth),
@@ -83,6 +84,7 @@ var flowy = function(canvas, grab, release, snapping, rearrange, spacing_x, spac
         }
         flowy.output = function() {
             var html_ser = canvas_div.innerHTML;
+            console.log('export');
             var json_data = {
                 html: html_ser,
                 blockarr: blocks,
@@ -111,6 +113,8 @@ var flowy = function(canvas, grab, release, snapping, rearrange, spacing_x, spac
                         json_data.blocks[i].attr.push(jsonobj);
                     });
                 }
+                
+                console.log(JSON.stringify(json_data));
                 return json_data;
             }
         }

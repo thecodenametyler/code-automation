@@ -5860,7 +5860,7 @@ strong, b,
         background-color: #103838; }
     .codeautomation_main #canvas .blockelem {
       width: auto;
-      padding: 1rem;
+      padding: 0;
       border: 2px solid #c4c4c6;
       transition: border-color ease 0.3s; }
       .codeautomation_main #canvas .blockelem.selectedblock {
@@ -5869,7 +5869,8 @@ strong, b,
       display: flex;
       justify-content: center;
       align-items: center;
-      flex-direction: column; }
+      flex-direction: column;
+      padding: 1rem; }
       .codeautomation_main #canvas .codeautomation_block p {
         margin: 0; }
       .codeautomation_main #canvas .codeautomation_block_icon i {
@@ -6032,6 +6033,7 @@ strong, b,
   .codeautomation_right_form label {
     margin-bottom: 0.375rem;
     font-size: 0.875rem; }
+  .codeautomation_right_form textarea,
   .codeautomation_right_form select,
   .codeautomation_right_form input {
     background-color: #FFF;
@@ -6085,5 +6087,3 @@ strong, b,
     align-items: center; }
   .blockelem.dragging .grabme {
     display: none; }
-
-/*# sourceMappingURL=style.css.map */

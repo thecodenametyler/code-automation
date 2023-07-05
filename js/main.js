@@ -1,8 +1,178 @@
 var codeautomation = {
     el: {
-        canvas: '#canvas'
+        debugger: false,
+        canvas: '#canvas',
+        blocks: {
+            alive: [],
+            definition: [],
+        },
+        form: {
+            container: '#properties'
+        }
     },
-    utils   : {
+    init: ()=> {
+        codeautomation.blocksDefinition();
+    },
+    getBlockDefinition: (blockID = null)=>{
+        let block = null;
+        if(!!blockID) {
+            block = codeautomation.el.blocks.definition[blockID];
+        } 
+        return block;
+    },
+    blocksDefinition: ()=> {
+        // codeautomation.el.blocks.definition;
+        //core
+        codeautomation.el.blocks.definition['core1'] = {
+            id: 'core1',
+            name: 'SMS',
+            desc: 'Triggers when a specified number receives a text message',
+            fields: [
+                {
+                    label: 'Receiver number',
+                    name: 'receiver_number',
+                    id: 'sms_receiver',
+                    type: 'text'
+                },
+                {
+                    label: 'Channel',
+                    name: 'sms_channel',
+                    id: 'sms_channel',
+                    type: 'select',
+                    options: [],
+                    dataSource: '/routeToGetChannels'
+                }
+            ]
+        }
+        //action
+        codeautomation.el.blocks.definition['b2'] = {
+            id: 'b2',
+            name: 'Time has passed',
+            desc: 'Triggers after a specified amount of time',
+            fields: [
+                {
+                    label: 'Time passed',
+                    name: 'time_passed',
+                    id: 'time_passed',
+                    type: 'text'
+                }
+            ]
+        }
+        codeautomation.el.blocks.definition['b3'] = {
+            id: 'b3',
+            name: 'Action is performed',
+            desc: 'Triggers when somebody performs a specified action',
+            fields: [
+                {
+                    label: 'Action performed',
+                    name: 'action_performed',
+                    id: 'action_performed',
+                    type: 'select',
+                    options: []
+                }
+            ]
+        }
+        //log
+        codeautomation.el.blocks.definition['c1'] = {
+            id: 'c1',
+            name: 'Add new log entry',
+            desc: 'Adds a new log entry to this project',
+            fields: [
+                {
+                    label: 'Log entry',
+                    name: 'log_entry',
+                    id: 'log_entry',
+                    type: 'textarea'
+                }
+            ]
+        }
+    },
+    initRightPanel: (type = null, uuid = null)=> {
+        let flag = false;
+        if(!!type) {
+            let blockDef = codeautomation.getBlockDefinition(type);
+            let tpl = codeautomation.utils.form.create(blockDef, uuid);
+            document.getElementById("properties").innerHTML = tpl;
+            if(!!tpl) {
+                flag = true;
+            }
+        }
+        return flag;
+    },
+    utils: {
+        form: {
+            create: (data = null, uuid = null)=>{
+                uuid = !!uuid ? uuid : codeautomation.utils.generateUUID();
+                let tpl = ``;
+                if(!!data) {
+                    tpl = `
+                    <div class="codeautomation_right_form_wrapper">
+                        <div class="codeautomation_right_header">
+                            <div>
+                                <h5>${data.name} Properties</h5>
+                                <p>${data.desc}</p>
+                            </div>
+                            <button onclick="closeRightCard();" type="button" class="cda_btn cda_btn--sm">
+                                <i class="icon-clear"></i>
+                            </button>
+                        </div>`;
+
+
+                        if(data?.fields) {
+                            tpl += `
+                            <div class="codeautomation_right_body">
+                                <div class="codeautomation_right_form">
+                                    `;
+                                    
+                                    data.fields.forEach(function (curField) {
+                                        tpl += `
+                                        <div class="codeautomation_right_form_row">
+                                            <label for="${uuid}__${curField?.id}">${curField?.label}</label>
+                                            `;
+                                            switch (curField?.type) {
+                                                case 'select':
+                                                    tpl += `
+                                                    <select name="${uuid}__${curField?.name}" id="${uuid}__${curField?.id}">
+                                                        <option>Select a channel</option>
+                                                    </select>
+                                                    `;
+                                                    break;
+                                                case 'text':
+                                                    tpl += `
+                                                    <input name="${uuid}__${curField?.name}" id="${uuid}__${curField?.id}" placeholder="type..." type="text">
+                                                    `;
+                                                    break;
+                                                case 'textarea':
+                                                    tpl += `
+                                                    <textarea name="${uuid}__${curField?.name}" id="${uuid}__${curField?.id}" placeholder="type..."></textarea>
+                                                    `;
+                                                    break;
+                                            
+                                                default:
+                                                    break;
+                                            }
+                                            
+                                        tpl += `
+                                        </div>
+                                        `;
+                                    });
+    
+                                    tpl += `
+                                    <div class="codeautomation_right_form_row">
+                                        <button class="cda_btn cda_btn--icon" type="button">
+                                            <i class="icon-save"></i><span>Save</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>`;
+                        }
+                    tpl += `
+                    </div>
+                `
+                }
+                return tpl;
+            }
+        },
         zoom:(state = 'in')=> {
             let level = !!$(codeautomation.el.canvas).attr('data-zoom') ? parseInt($(codeautomation.el.canvas).attr('data-zoom')) : 100;
             if (state == 'in') {
@@ -12,11 +182,29 @@ var codeautomation = {
             }
             $(codeautomation.el.canvas).attr('data-zoom', level);
             $(codeautomation.el.canvas).css("zoom",level+"%"); 
-        }
+        },
+        generateUUID: ()=> {
+            if(codeautomation.el.debugger) {
+                console.log('generateUUID()');
+            }
+            var d = new Date().getTime();//Timestamp
+            var d2 = ((typeof performance !== 'undefined') && performance.now && (performance.now()*1000)) || 0;//Time in microseconds since page-load or 0 if unsupported
+            return 'xxxxxyxxxxx'.replace(/[xy]/g, function(c) {
+                var r = Math.random() * 16;//random number between 0 and 16
+                if(d > 0){//Use timestamp until depleted
+                    r = (d + r)%16 | 0;
+                    d = Math.floor(d/16);
+                } else {//Use microseconds since page-load if supported
+                    r = (d2 + r)%16 | 0;
+                    d2 = Math.floor(d2/16);
+                }
+                return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+            });
+        },
     }
 };
-
-document.addEventListener("DOMContentLoaded", function(){
+codeautomation.init();
+// document.addEventListener("DOMContentLoaded", function(){
     var rightcard = false;
     var tempblock;
     var tempblock2;
@@ -53,9 +241,18 @@ document.addEventListener("DOMContentLoaded", function(){
             drag.innerHTML += `<div class="codeautomation_block_end"><i class="icon-flash_off"></i></div>`;
         }
         
+        let uuid = codeautomation.utils.generateUUID();
+        
+        drag.innerHTML += `<input type="hidden" name="blockuuid" class="blockuuid" value="${uuid}"></input>`;
+
+        codeautomation.el.blocks.alive[uuid] = {
+            'id': uuid,
+            'blockID': drag.querySelector(".blockelemtype").value
+        }
+        
         if (drag.querySelector(".blockelemtype").value == "core1") {
             drag.innerHTML += `
-            <div class="codeautomation_block">
+            <div class="codeautomation_block" onclick="openRightCard(event);">
                 <div class="codeautomation_block_icon">
                     <i class="icon-textsms"></i>
                 </div>
@@ -63,7 +260,7 @@ document.addEventListener("DOMContentLoaded", function(){
             `;
         } else if (drag.querySelector(".blockelemtype").value == "b1") {
             drag.innerHTML += `
-            <div class="codeautomation_block">
+            <div class="codeautomation_block" onclick="openRightCard(event);">
                 <div class="codeautomation_block_icon">
                     <i class="icon-logout"></i>
                 </div>
@@ -71,7 +268,7 @@ document.addEventListener("DOMContentLoaded", function(){
             `;
         } else if (drag.querySelector(".blockelemtype").value == "b2") {
             drag.innerHTML += `
-            <div class="codeautomation_block">
+            <div class="codeautomation_block" onclick="openRightCard(event);">
                 <div class="codeautomation_block_icon">
                     <i class="icon-access_time"></i>
                 </div>
@@ -79,7 +276,7 @@ document.addEventListener("DOMContentLoaded", function(){
             `;
         } else if (drag.querySelector(".blockelemtype").value == "b3") {
             drag.innerHTML += `
-            <div class="codeautomation_block">
+            <div class="codeautomation_block" onclick="openRightCard(event);">
                 <div class="codeautomation_block_icon">
                     <i class="icon-bolt"></i>
                 </div>
@@ -87,7 +284,7 @@ document.addEventListener("DOMContentLoaded", function(){
             `;
         } else if (drag.querySelector(".blockelemtype").value == "c1") {
             drag.innerHTML += `
-            <div class="codeautomation_block">
+            <div class="codeautomation_block" onclick="openRightCard(event);">
                 <div class="codeautomation_block_icon">
                     <i class="icon-create"></i>
                 </div>
@@ -217,7 +414,19 @@ document.addEventListener("DOMContentLoaded", function(){
         }
     }
     addEventListenerMulti("click", disabledClick, false, ".side");
-    document.getElementById("close").addEventListener("click", function(){
+    // document.getElementById("close").addEventListener("click", function(){
+    //     console.log('asddddddddd');
+    //    if (rightcard) {
+    //        rightcard = false;
+    //        document.getElementById("properties").classList.remove("expanded");
+    //        setTimeout(function(){
+    //             document.getElementById("propwrap").classList.remove("itson"); 
+    //        }, 300);
+    //         tempblock.classList.remove("selectedblock");
+    //    } 
+    // });
+
+    let closeRightCard = ()=> {
         console.log('asddddddddd');
        if (rightcard) {
            rightcard = false;
@@ -227,48 +436,69 @@ document.addEventListener("DOMContentLoaded", function(){
            }, 300);
             tempblock.classList.remove("selectedblock");
        } 
-    });
-    
-document.getElementById("removeblock").addEventListener("click", function(){
-    console.log('wawaw');
-    flowy.deleteBlocks();
-    if (rightcard) {
-        rightcard = false;
-        document.getElementById("properties").classList.remove("expanded");
-        setTimeout(function(){
-             document.getElementById("propwrap").classList.remove("itson"); 
-        }, 300);
-         tempblock.classList.remove("selectedblock");
-    } 
-});
-var aclick = false;
-var noinfo = false;
-var beginTouch = function (event) {
-    console.log('beginTouch');
-    aclick = true;
-    noinfo = false;
-    if (event.target.closest(".create-flowy")) {
-        noinfo = true;
-    }
-}
-var checkTouch = function (event) {
-    console.log('checkTouch');
-    aclick = false;
-}
-var doneTouch = function (event) {
-    console.log('doneTouch');
-    if (event.type === "mouseup" && aclick && !noinfo) {
-      if (!rightcard && event.target.closest(".block") && !event.target.closest(".block").classList.contains("dragging")) {
-            tempblock = event.target.closest(".block");
+    };
+
+    let openRightCard = (event)=> {
+        console.log('openRightCard');
+        let allSelectedBlocks = document.querySelectorAll('.blockelem.selectedblock');
+        allSelectedBlocks.forEach(function (currentValue) {
+            currentValue.classList.remove("selectedblock");
+        });
+
+        tempblock = event.target.closest(".block");
+        let blockType = tempblock.querySelector(".blockelemtype").value;
+        let blockUUid = tempblock.querySelector(".blockuuid").value;
+
+        let tpl = codeautomation.initRightPanel(blockType, blockUUid);
+        if(!!tpl) {
             rightcard = true;
             document.getElementById("properties").classList.add("expanded");
             document.getElementById("propwrap").classList.add("itson");
             tempblock.classList.add("selectedblock");
-       } 
+        }
+    };
+    
+    document.getElementById("removeblock").addEventListener("click", function(){
+        console.log('wawaw');
+        flowy.deleteBlocks();
+        if (rightcard) {
+            rightcard = false;
+            document.getElementById("properties").classList.remove("expanded");
+            setTimeout(function(){
+                document.getElementById("propwrap").classList.remove("itson"); 
+            }, 300);
+            tempblock.classList.remove("selectedblock");
+        } 
+    });
+    var aclick = false;
+    var noinfo = false;
+    var beginTouch = function (event) {
+        console.log('beginTouch');
+        aclick = true;
+        noinfo = false;
+        if (event.target.closest(".create-flowy")) {
+            noinfo = true;
+        }
     }
-}
-addEventListener("mousedown", beginTouch, false);
-addEventListener("mousemove", checkTouch, false);
-addEventListener("mouseup", doneTouch, false);
-addEventListenerMulti("touchstart", beginTouch, false, ".block");
-});
+    var checkTouch = function (event) {
+        console.log('checkTouch');
+        aclick = false;
+    }
+    var doneTouch = function (event) {
+        console.log('doneTouch');
+        if (event.type === "mouseup" && aclick && !noinfo) {
+            if (!rightcard && event.target.closest(".block") && !event.target.closest(".block").classList.contains("dragging")) {
+                    // tempblock = event.target.closest(".block");
+                    // rightcard = true;
+                    // document.getElementById("properties").classList.add("expanded");
+                    // document.getElementById("propwrap").classList.add("itson");
+                    // tempblock.classList.add("selectedblock");
+            } 
+        }
+    }
+    addEventListener("mousedown", beginTouch, false);
+    addEventListener("mousemove", checkTouch, false);
+    addEventListener("mouseup", doneTouch, false);
+    addEventListenerMulti("touchstart", beginTouch, false, ".block");
+// });
+
