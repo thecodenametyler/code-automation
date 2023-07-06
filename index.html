@@ -39,10 +39,10 @@
                         <button class="cda_btn cda_btn--icon" type="button"><i class="icon-history"></i><span>History</span></button>
                     </li>
                     <li class="codeautomation_header_action_item">
-                        <button class="cda_btn cda_btn--icon" type="button"><i class="icon-save"></i><span>Draft</span></button>
+                        <button onclick="codeautomation.utils.flowy.export();" class="cda_btn cda_btn--icon" type="button"><i class="icon-save"></i><span>Draft</span></button>
                     </li>
                     <li class="codeautomation_header_action_item">
-                        <button class="cda_btn cda_btn--icon" type="button"><i class="icon-publish"></i><span>Publish</span></button>
+                        <button onclick="codeautomation.utils.flowy.export();" class="cda_btn cda_btn--icon" type="button"><i class="icon-publish"></i><span>Publish</span></button>
                     </li>
                 </ul>
             </div>
@@ -63,7 +63,7 @@
                         </div>
                         <div id="blocklist" class="codeautomation_left_widget_blocklist">
                             <div class="blockelem create-flowy noselect">
-                                <input type="hidden" name='blockelemtype' class="blockelemtype" value="core1">
+                                <input type="hidden" name='blockelemtype' class="blockelemtype" value="core_1">
                                 <input type="hidden" name='blockelemiscore' class="blockelemiscore" value="1">
                                 <div class="grabme">
                                     <img src="assets/grabme.svg">

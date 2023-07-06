@@ -23,8 +23,8 @@ var codeautomation = {
     blocksDefinition: ()=> {
         // codeautomation.el.blocks.definition;
         //core
-        codeautomation.el.blocks.definition['core1'] = {
-            id: 'core1',
+        codeautomation.el.blocks.definition['core_1'] = {
+            id: 'core_1',
             name: 'SMS',
             desc: 'Triggers when a specified number receives a text message',
             fields: [
@@ -39,19 +39,24 @@ var codeautomation = {
                     name: 'sms_channel',
                     id: 'sms_channel',
                     type: 'select',
-                    options: [],
+                    options: [
+                        {
+                            name: 'Test channel',
+                            value: 'test_channel'
+                        }
+                    ],
                     dataSource: '/routeToGetChannels'
                 }
             ]
         }
         //action
-        codeautomation.el.blocks.definition['b2'] = {
-            id: 'b2',
+        codeautomation.el.blocks.definition['action_2'] = {
+            id: 'action_2',
             name: 'Time has passed',
             desc: 'Triggers after a specified amount of time',
             fields: [
                 {
-                    label: 'Time passed',
+                    label: 'After time has passed',
                     name: 'time_passed',
                     id: 'time_passed',
                     type: 'select',
@@ -95,15 +100,15 @@ var codeautomation = {
                     ]
                 },
                 {
-                    label: 'email',
+                    label: 'To Email',
                     name: 'email',
                     id: 'email',
                     type: 'email'
                 }
             ]
         }
-        codeautomation.el.blocks.definition['b3'] = {
-            id: 'b3',
+        codeautomation.el.blocks.definition['action_3'] = {
+            id: 'action_3',
             name: 'Action is performed',
             desc: 'Triggers when somebody performs a specified action',
             fields: [
@@ -116,8 +121,8 @@ var codeautomation = {
             ]
         }
         //log
-        codeautomation.el.blocks.definition['c1'] = {
-            id: 'c1',
+        codeautomation.el.blocks.definition['logger_1'] = {
+            id: 'logger_1',
             name: 'Add new log entry',
             desc: 'Adds a new log entry to this project',
             fields: [
@@ -143,6 +148,19 @@ var codeautomation = {
         return flag;
     },
     utils: {
+        flowy: {
+            export: ()=> {
+                console.log('codeautomation export');
+                let flOut = flowy.output();
+                if(!!flOut) {
+                    flOut.blocks.forEach((currentElem)=>{
+                        codeautomation.el.blocks.alive[currentElem.uuid].link.parent = !!flOut.blocks[currentElem.parent]?.uuid ? flOut.blocks[currentElem.parent].uuid : 0;
+                    });
+                }
+                console.log(codeautomation.el.blocks.alive);
+
+            }
+        },
         form: {
             submit: (evt,currentElem)=> {
                 let formWrapper = evt.target.closest(".codeautomation_right_form_wrapper");
@@ -161,6 +179,8 @@ var codeautomation = {
             create: (data = null, uuid = null)=>{
                 uuid = !!uuid ? uuid : codeautomation.utils.generateUUID();
                 let tpl = ``;
+                let blockData = codeautomation.el.blocks.alive[uuid];
+
                 if(!!data) {
                     tpl = `
                     <div class="codeautomation_right_form_wrapper" data-cda-blk-uuid="${uuid}">
@@ -189,12 +209,18 @@ var codeautomation = {
                                             `;
 
                                             if(!!curField?.type) {
+                                                let val = ''
                                                 switch (curField.type) {
                                                     case 'select':
                                                         var fieldOpt = `<option>Select...</option>`;
                                                         if(!!curField?.options) {
                                                             curField.options.forEach(function (curOption) {
-                                                                fieldOpt += `<option value="${curOption.value}">${curOption.name}</option>`;
+                                                                let selectattr = '';
+                                                                val =  !!blockData?.data && !!blockData?.data[curField?.name] ? blockData.data[curField.name] : '';
+                                                                if(val == curOption.value) {
+                                                                    selectattr = 'selected';
+                                                                }
+                                                                fieldOpt += `<option ${selectattr} value="${curOption.value}">${curOption.name}</option>`;
                                                             });
                                                         }
                                                         tpl += `
@@ -205,13 +231,15 @@ var codeautomation = {
                                                         break;
                                                     case 'email':
                                                     case 'text':
+                                                        val =  !!blockData?.data && !!blockData?.data[curField?.name] ? blockData.data[curField.name] : '';
                                                         tpl += `
-                                                        <input name="${uuid}__${curField?.name}" id="${uuid}__${curField?.id}" placeholder="type..." type="text">
+                                                        <input name="${uuid}__${curField?.name}" id="${uuid}__${curField?.id}" value="${val}" placeholder="type..." type="text">
                                                         `;
                                                         break;
                                                     case 'textarea':
+                                                        val =  !!blockData?.data && !!blockData?.data[curField?.name] ? blockData.data[curField.name] : '';
                                                         tpl += `
-                                                        <textarea name="${uuid}__${curField?.name}" id="${uuid}__${curField?.id}" placeholder="type..."></textarea>
+                                                        <textarea name="${uuid}__${curField?.name}" id="${uuid}__${curField?.id}" placeholder="type...">${val}</textarea>
                                                         `;
                                                         break;
                                                 
@@ -281,7 +309,6 @@ codeautomation.init();
     flowy(document.getElementById("canvas"), drag, release, snapping, rearrange, 50, 50);
     function addEventListenerMulti(type, listener, capture, selector) {
         var nodes = document.querySelectorAll(selector);
-        console.log('asdasd');
         for (var i = 0; i < nodes.length; i++) {
             nodes[i].addEventListener(type, listener, capture);
         }
@@ -317,10 +344,14 @@ codeautomation.init();
         codeautomation.el.blocks.alive[uuid] = {
             id: uuid,
             blockID: drag.querySelector(".blockelemtype").value,
-            data: {}
+            data: {},
+            link: {
+                parent: '',
+                // child: ''
+            }
         }
         
-        if (drag.querySelector(".blockelemtype").value == "core1") {
+        if (drag.querySelector(".blockelemtype").value == "core_1") {
             drag.innerHTML += `
             <div class="codeautomation_block" onclick="openRightCard(event);">
                 <div class="codeautomation_block_icon">
@@ -328,7 +359,7 @@ codeautomation.init();
                 </div>
             </div>
             `;
-        } else if (drag.querySelector(".blockelemtype").value == "b1") {
+        } else if (drag.querySelector(".blockelemtype").value == "action_1") {
             drag.innerHTML += `
             <div class="codeautomation_block" onclick="openRightCard(event);">
                 <div class="codeautomation_block_icon">
@@ -336,7 +367,7 @@ codeautomation.init();
                 </div>
             </div>
             `;
-        } else if (drag.querySelector(".blockelemtype").value == "b2") {
+        } else if (drag.querySelector(".blockelemtype").value == "action_2") {
             drag.innerHTML += `
             <div class="codeautomation_block" onclick="openRightCard(event);">
                 <div class="codeautomation_block_icon">
@@ -344,7 +375,7 @@ codeautomation.init();
                 </div>
             </div>
             `;
-        } else if (drag.querySelector(".blockelemtype").value == "b3") {
+        } else if (drag.querySelector(".blockelemtype").value == "action_3") {
             drag.innerHTML += `
             <div class="codeautomation_block" onclick="openRightCard(event);">
                 <div class="codeautomation_block_icon">
@@ -352,7 +383,7 @@ codeautomation.init();
                 </div>
             </div>
             `;
-        } else if (drag.querySelector(".blockelemtype").value == "c1") {
+        } else if (drag.querySelector(".blockelemtype").value == "logger_1") {
             drag.innerHTML += `
             <div class="codeautomation_block" onclick="openRightCard(event);">
                 <div class="codeautomation_block_icon">
@@ -403,7 +434,7 @@ codeautomation.init();
         if (this.getAttribute("id") == "cores") {
             document.getElementById("blocklist").innerHTML = `
             <div class="blockelem create-flowy noselect">
-                <input type="hidden" name='blockelemtype' class="blockelemtype" value="core1">
+                <input type="hidden" name='blockelemtype' class="blockelemtype" value="core_1">
                 <input type="hidden" name='blockelemiscore' class="blockelemiscore" value="1">
                 <div class="grabme">
                     <img src="assets/grabme.svg">
@@ -423,7 +454,7 @@ codeautomation.init();
         } else if (this.getAttribute("id") == "actions") {
             document.getElementById("blocklist").innerHTML = `
             <div class="blockelem create-flowy noselect">
-                <input type="hidden" name="blockelemtype" class="blockelemtype" value="b1">
+                <input type="hidden" name="blockelemtype" class="blockelemtype" value="action_1">
                 <input type="hidden" name='blockelemiend' class="blockelemiend" value="1">
                 <div class="grabme">
                     <img src="assets/grabme.svg">
@@ -440,7 +471,7 @@ codeautomation.init();
                 </div>
             </div>
             <div class="blockelem create-flowy noselect">
-                <input type="hidden" name="blockelemtype" class="blockelemtype" value="b2">
+                <input type="hidden" name="blockelemtype" class="blockelemtype" value="action_2">
                 <div class="grabme">
                     <img src="assets/grabme.svg">
                 </div>
@@ -458,7 +489,7 @@ codeautomation.init();
                 </div>
             </div>
             <div class="blockelem create-flowy noselect">
-                <input type="hidden" name="blockelemtype" class="blockelemtype" value="b3">
+                <input type="hidden" name="blockelemtype" class="blockelemtype" value="action_3">
                 <div class="grabme">
                     <img src="assets/grabme.svg">
                 </div>
@@ -480,7 +511,7 @@ codeautomation.init();
         } else if (this.getAttribute("id") == "loggers") {
             document.getElementById("blocklist").innerHTML = `
             <div class="blockelem create-flowy noselect">
-                <input type="hidden" name="blockelemtype" class="blockelemtype" value="c1">
+                <input type="hidden" name="blockelemtype" class="blockelemtype" value="logger_1">
                 <div class="grabme">
                     <img src="assets/grabme.svg">
                 </div>
@@ -567,7 +598,7 @@ codeautomation.init();
         }
     }
     var checkTouch = function (event) {
-        console.log('checkTouch');
+        // console.log('checkTouch');
         aclick = false;
     }
     var doneTouch = function (event) {

@@ -119,7 +119,7 @@ var flowy = function(canvas, grab, release, snapping, rearrange, spacing_x, spac
                     });
                 }
                 
-                console.log(JSON.stringify(json_data));
+                // console.log(JSON.stringify(json_data));
                 return json_data;
             }
         }
