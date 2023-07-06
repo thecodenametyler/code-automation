@@ -3,8 +3,8 @@ var codeautomation = {
         debugger: false,
         canvas: '#canvas',
         blocks: {
-            alive: [],
-            definition: [],
+            alive: {},
+            definition: {},
         },
         form: {
             container: '#properties'
@@ -147,20 +147,148 @@ var codeautomation = {
         }
         return flag;
     },
-    utils: {
-        flowy: {
-            export: ()=> {
-                console.log('codeautomation export');
-                let flOut = flowy.output();
-                if(!!flOut) {
-                    flOut.blocks.forEach((currentElem)=>{
-                        codeautomation.el.blocks.alive[currentElem.uuid].link.parent = !!flOut.blocks[currentElem.parent]?.uuid ? flOut.blocks[currentElem.parent].uuid : 0;
-                    });
+    export: ()=> {
+        console.log('codeautomation export');
+        let flOut = flowy.output();
+        if(!!flOut) {
+            flOut.blocks.forEach((currentElem)=>{
+                codeautomation.el.blocks.alive[currentElem.uuid].link.parent = !!flOut.blocks[currentElem.parent]?.uuid ? flOut.blocks[currentElem.parent].uuid : 0;
+            });
+        }
+        console.log(codeautomation.el.blocks.alive);
+    },
+    import: (flowyData = null, cdaData = null)=> {
+        cdaData = JSON.parse(`{"debce9badf7":{"id":"debce9badf7","blockID":"core_1","data":{"receiver_number":"hjkh","sms_channel":"test_channel"},"link":{"parent":0}},"ba222bf2f11":{"id":"ba222bf2f11","blockID":"action_2","data":{"time_passed":"30min","do_event":"forwardtoemail","email":"asdasdasdtest@yopmail.com"},"link":{"parent":"debce9badf7"}},"97bffa86e6c":{"id":"97bffa86e6c","blockID":"action_1","data":{},"link":{"parent":"ba222bf2f11"}}}`);
+        flowyData = {
+            "html": "<div class=\"blockelem noselect block\" style=\"left: 148px; top: 160px;\">\n                                <input type=\"hidden\" name=\"blockelemtype\" class=\"blockelemtype\" value=\"core_1\">\n                                <input type=\"hidden\" name=\"blockelemiscore\" class=\"blockelemiscore\" value=\"1\">\n                                \n                                \n                            <input type=\"hidden\" name=\"blockid\" class=\"blockid\" value=\"0\"><div class=\"codeautomation_block_core\"><i class=\"icon-bolt\"></i></div><input type=\"hidden\" name=\"blockuuid\" class=\"blockuuid\" value=\"debce9badf7\">\n            <div class=\"codeautomation_block\" onclick=\"openRightCard(event);\">\n                <div class=\"codeautomation_block_icon\">\n                    <i class=\"icon-textsms\"></i>\n                </div>\n            </div>\n            </div><div class=\"blockelem noselect block\" style=\"left: 148px; top: 270px;\">\n                <input type=\"hidden\" name=\"blockelemtype\" class=\"blockelemtype\" value=\"action_2\">\n                \n                \n                <input type=\"hidden\" name=\"blockid\" class=\"blockid\" value=\"1\"><input type=\"hidden\" name=\"blockuuid\" class=\"blockuuid\" value=\"ba222bf2f11\">\n            <div class=\"codeautomation_block\" onclick=\"openRightCard(event);\">\n                <div class=\"codeautomation_block_icon\">\n                    <i class=\"icon-access_time\"></i>\n                </div>\n            </div>\n            <div class=\"indicator invisible\" style=\"left: 25px; top: 60px;\"></div></div><div class=\"arrowblock\" style=\"left: 158px; top: 220px;\"><input type=\"hidden\" class=\"arrowid\" value=\"1\"><svg preserveAspectRatio=\"none\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M20 0L20 25L20 25L20 50\" stroke=\"#C5CCD0\" stroke-width=\"2px\"></path><path d=\"M15 45H25L20 50L15 45Z\" fill=\"#C5CCD0\"></path></svg></div><div class=\"blockelem noselect block\" style=\"left: 148px; top: 380px;\">\n                <input type=\"hidden\" name=\"blockelemtype\" class=\"blockelemtype\" value=\"action_1\">\n                <input type=\"hidden\" name=\"blockelemiend\" class=\"blockelemiend\" value=\"1\">\n                \n                \n            <input type=\"hidden\" name=\"blockid\" class=\"blockid\" value=\"2\"><div class=\"codeautomation_block_end\"><i class=\"icon-flash_off\"></i></div><input type=\"hidden\" name=\"blockuuid\" class=\"blockuuid\" value=\"97bffa86e6c\">\n            <div class=\"codeautomation_block\" onclick=\"openRightCard(event);\">\n                <div class=\"codeautomation_block_icon\">\n                    <i class=\"icon-logout\"></i>\n                </div>\n            </div>\n            </div><div class=\"arrowblock\" style=\"left: 158px; top: 330px;\"><input type=\"hidden\" class=\"arrowid\" value=\"2\"><svg preserveAspectRatio=\"none\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M20 0L20 25L20 25L20 50\" stroke=\"#C5CCD0\" stroke-width=\"2px\"></path><path d=\"M15 45H25L20 50L15 45Z\" fill=\"#C5CCD0\"></path></svg></div>",
+            "blockarr": [
+                {
+                    "parent": -1,
+                    "childwidth": 60,
+                    "id": 0,
+                    "x": 178,
+                    "y": 190,
+                    "width": 60,
+                    "height": 60
+                },
+                {
+                    "childwidth": 60,
+                    "parent": 0,
+                    "id": 1,
+                    "x": 178,
+                    "y": 300,
+                    "width": 60,
+                    "height": 60
+                },
+                {
+                    "childwidth": 0,
+                    "parent": 1,
+                    "id": 2,
+                    "x": 178,
+                    "y": 410,
+                    "width": 60,
+                    "height": 60
                 }
-                console.log(codeautomation.el.blocks.alive);
-
-            }
-        },
+            ],
+            "blocks": [
+                {
+                    "uuid": "debce9badf7",
+                    "id": 0,
+                    "parent": -1,
+                    "data": [
+                        {
+                            "name": "blockelemtype",
+                            "value": "core_1"
+                        },
+                        {
+                            "name": "blockelemiscore",
+                            "value": "1"
+                        },
+                        {
+                            "name": "blockid",
+                            "value": "0"
+                        },
+                        {
+                            "name": "blockuuid",
+                            "value": "debce9badf7"
+                        }
+                    ],
+                    "attr": [
+                        {
+                            "class": "blockelem noselect block"
+                        },
+                        {
+                            "style": "left: 148px; top: 160px;"
+                        }
+                    ]
+                },
+                {
+                    "uuid": "ba222bf2f11",
+                    "id": 1,
+                    "parent": 0,
+                    "data": [
+                        {
+                            "name": "blockelemtype",
+                            "value": "action_2"
+                        },
+                        {
+                            "name": "blockid",
+                            "value": "1"
+                        },
+                        {
+                            "name": "blockuuid",
+                            "value": "ba222bf2f11"
+                        }
+                    ],
+                    "attr": [
+                        {
+                            "class": "blockelem noselect block"
+                        },
+                        {
+                            "style": "left: 148px; top: 270px;"
+                        }
+                    ]
+                },
+                {
+                    "uuid": "97bffa86e6c",
+                    "id": 2,
+                    "parent": 1,
+                    "data": [
+                        {
+                            "name": "blockelemtype",
+                            "value": "action_1"
+                        },
+                        {
+                            "name": "blockelemiend",
+                            "value": "1"
+                        },
+                        {
+                            "name": "blockid",
+                            "value": "2"
+                        },
+                        {
+                            "name": "blockuuid",
+                            "value": "97bffa86e6c"
+                        }
+                    ],
+                    "attr": [
+                        {
+                            "class": "blockelem noselect block"
+                        },
+                        {
+                            "style": "left: 148px; top: 380px;"
+                        }
+                    ]
+                }
+            ]
+        };
+        
+        if(!!flowyData && !!cdaData) {
+            flowy.import(flowyData);
+            codeautomation.el.blocks.alive = cdaData;
+        }
+    },
+    utils: {
         form: {
             submit: (evt,currentElem)=> {
                 let formWrapper = evt.target.closest(".codeautomation_right_form_wrapper");
